@@ -19,7 +19,7 @@ module Spree
           def send_inventory_cancellation_email(event)
             order = Spree::Order.find(event.order_id)
             inventory_units = Spree::InventoryUnit.find(event.inventory_unit_ids)
-            Spree::Config.order_mailer_class.inventory_cancellation_email(order, inventory_units).deliver_later
+            Spree::Config.order_mailer_class.inventory_cancellation_email(order, inventory_units).deliver_later if Spree::OrderCancellations.send_cancellation_mailer
           end
 
           def send_reimbursement_email(event)
