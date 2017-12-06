@@ -49,10 +49,18 @@ RSpec.describe Spree::Order, type: :model do
       order.finalize!
     end
 
+    it "should not sell inventory units if track_inventory_levels is false" do
+      Spree::Config.set track_inventory_levels: false
+      expect(Spree::InventoryUnit).not_to receive(:sell_units)
+      order.finalize!
+    end
+
+    it "sends event notifications" do
+      expect(Spree.event_bus).to receive(:publish).with(instance_of(Spree::Events::OrderConfirmedEvent))
+      order.finalize!
+    end
+
     it "should freeze all adjustments" do
-      # Stub this method as it's called due to a callback
-      # and it's irrelevant to this test
-      allow(Spree::OrderMailer).to receive_message_chain :confirm_email, :deliver_later
       adjustments = [double]
       expect(order).to receive(:all_adjustments).and_return(adjustments)
       adjustments.each do |adj|
