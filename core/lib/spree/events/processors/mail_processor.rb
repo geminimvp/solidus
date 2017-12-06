@@ -24,7 +24,7 @@ module Spree
 
           def send_reimbursement_email(event)
             reimbursement = Spree::Reimbursement.find(event.reimbursement_id)
-            Spree::ReimbursementMailer.reimbursement_email(reimbursement).deliver_later
+            Spree::Config.reimbursement_mailer_class.reimbursement_email(reimbursement).deliver_later
           end
 
           def send_carton_shipped_emails(event)
