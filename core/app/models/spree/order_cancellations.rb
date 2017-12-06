@@ -40,7 +40,10 @@ class Spree::OrderCancellations
         end
 
         update_shipped_shipments(inventory_units)
-        Spree::OrderMailer.inventory_cancellation_email(@order, inventory_units.to_a).deliver_later if Spree::OrderCancellations.send_cancellation_mailer
+        Spree.event_bus.publish(
+          :order_inventory_cancelled,
+          Spree::Events::OrderInventoryCancelledEvent.new(order: @order, inventory_units: inventory_units.to_a)
+        )
       end
 
       @order.recalculate
