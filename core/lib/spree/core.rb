@@ -91,3 +91,4 @@ require 'spree/preferences/static_model_preferences'
 require 'spree/preferences/scoped_store'
 
 require 'spree/event_bus'
+require 'spree/events/processors/mail_processor'
