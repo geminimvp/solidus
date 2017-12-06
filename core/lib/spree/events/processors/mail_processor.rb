@@ -7,19 +7,19 @@ module Spree
         class << self
           def send_confirm_email(event)
             order = Spree::Order.find(event.order_id)
-            Spree::OrderMailer.confirm_email(order).deliver_later unless order.confirmation_delivered?
+            Spree::Config.order_mailer_class.confirm_email(order).deliver_later unless order.confirmation_delivered?
             order.update_column(:confirmation_delivered, true)
           end
 
           def send_cancel_email(event)
             order = Spree::Order.find(event.order_id)
-            Spree::OrderMailer.cancel_email(order).deliver_later
+            Spree::Config.order_mailer_class.cancel_email(order).deliver_later
           end
 
           def send_inventory_cancellation_email(event)
             order = Spree::Order.find(event.order_id)
             inventory_units = Spree::InventoryUnit.find(event.inventory_unit_ids)
-            Spree::OrderMailer.inventory_cancellation_email(order, inventory_units).deliver_later
+            Spree::Config.order_mailer_class.inventory_cancellation_email(order, inventory_units).deliver_later
           end
 
           def send_reimbursement_email(event)
