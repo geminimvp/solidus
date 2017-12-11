@@ -2,13 +2,14 @@ module Spree
   module Stock
     class Package
       attr_reader :stock_location, :contents
-      attr_accessor :shipment
+      attr_accessor :shipment, :unit_index
 
       # @param stock_location [Spree::StockLocation] the stock location this package originates from
       # @param contents [Array<Spree::Stock::ContentItem>] the contents of this package
-      def initialize(stock_location, contents = [])
+      def initialize(stock_location, contents = [], unit_index = nil)
         @stock_location = stock_location
         @contents = contents
+        @unit_index = unit_index || rebuild_unit_index
       end
 
       # Adds an inventory unit to this package.
@@ -18,7 +19,10 @@ module Spree
       # @param state [:on_hand, :backordered] the state of the item to be
       #   added to this package
       def add(inventory_unit, state = :on_hand)
-        contents << ContentItem.new(inventory_unit, state) unless find_item(inventory_unit)
+        unless inventory_unit_present?(inventory_unit)
+          contents << ContentItem.new(inventory_unit, state)
+          unit_index[inventory_unit] = true
+        end
       end
 
       # Adds multiple inventory units to this package.
@@ -37,7 +41,10 @@ module Spree
       #   removed from this package
       def remove(inventory_unit)
         item = find_item(inventory_unit)
-        @contents -= [item] if item
+        if item
+          @contents -= [item]
+          unit_index[inventory_unit] = nil
+        end
       end
 
       # @return [Spree::Order] the order associated with this package
@@ -135,6 +142,19 @@ module Spree
       def shipping_category_ids
         contents.map { |item| item.variant.shipping_category_id }.compact.uniq
       end
+
+      def rebuild_unit_index
+        new_index = {}
+        contents.each { |item|
+          new_index[item.inventory_unit] = true
+        }
+        new_index
+      end
+
+      def inventory_unit_present?(inventory_unit)
+        unit_index[inventory_unit] == true
+      end
+
     end
   end
 end
