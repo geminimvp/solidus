@@ -8,20 +8,23 @@ module Spree
                       styles: { mini: '48x48>', small: '100x100>', product: '240x240>', large: '600x600>' },
                       default_style: :product,
                       default_url: 'noimage/:style.png',
-                      url: '/spree/products/:id/:style/:basename.:extension',
+                      url: :get_url,
                       path: ':rails_root/public/spree/products/:id/:style/:basename.:extension',
                       convert_options: { all: '-strip -auto-orient -colorspace sRGB' }
-    validates_attachment :attachment,
-      presence: true,
-      content_type: { content_type: %w(image/jpeg image/jpg image/png image/gif) }
+    validates_attachment :attachment, presence: true, content_type: { content_type: %w("image/jpeg" "image/jpg" "image/png" "image/gif") }
 
     # save the w,h of the original image (from which others can be calculated)
     # we need to look at the write-queue for images which have not been saved yet
-    after_post_process :find_dimensions, if: :valid?
-
+    after_post_process :find_dimensions, if: :no_attachment_errors
+  
     # used by admin products autocomplete
     def mini_url
       attachment.url(:mini, false)
+    end
+
+    def get_url
+      #return '/spree/digital_assets/:id/:style/:basename.:extension'
+      return '/spree/products/:id/:style/:basename.:extension'
     end
 
     def find_dimensions
