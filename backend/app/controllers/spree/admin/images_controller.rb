@@ -6,6 +6,7 @@ module Spree
       before_action :load_data
 
       create.before :set_viewable
+      create.before :set_type
       update.before :set_viewable
 
       private
@@ -24,6 +25,10 @@ module Spree
           [variant.sku_and_options_text, variant.id]
         end
         @variants.insert(0, [t('spree.all'), @product.master.id])
+      end
+
+      def set_type
+        @image.type = 'Spree::DigitalAsset' if params[:image][:digital_asset_id].present?
       end
 
       def set_viewable
