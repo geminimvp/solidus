@@ -51,7 +51,9 @@ module Spree
 
       def index
         authorize! :index, Order
-        @orders = paginate(Spree::Order.ransack(params[:q]).result)
+        q = Spree::Order.ransack(params[:q])
+        orders_base = q.result.includes(:user, :payments, :store_credits, :line_items)
+        @orders = paginate(orders_base)
         respond_with(@orders)
       end
 
