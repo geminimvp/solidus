@@ -75,6 +75,20 @@ module Spree
       master || build_master
     end
 
+    def digital_assets
+      query = <<-SQL
+        SELECT DISTINCT spree_digital_assets.*
+        FROM spree_digital_assets
+        INNER JOIN spree_assets ON spree_assets.digital_asset_id=spree_digital_assets.id
+        INNER JOIN spree_assets_variants ON spree_assets.id=spree_assets_variants.image_id
+        INNER JOIN spree_variants ON spree_variants.id=spree_variants.id
+        INNER JOIN spree_products ON spree_products.id=spree_variants.product_id
+        WHERE spree_products.id=#{self.id}
+      SQL
+      results = ActiveRecord::Base.connection.exec_query(query)
+      results.map { |result| Spree::DigitalAsset.new(result); }
+    end
+
     MASTER_ATTRIBUTES = [
       :cost_currency,
       :cost_price,

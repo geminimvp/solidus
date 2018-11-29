@@ -1511,6 +1511,7 @@ en:
     next: Next
     no_actions_added: No actions added
     no_images_found: No images found
+    no_digital_assets_found: No digital assets found
     no_inventory_selected: No inventory selected
     no_orders_found: No orders found
     no_option_values_on_product_html: "This product has no associated option values. Add some to it through Option Types in the %{link}."
