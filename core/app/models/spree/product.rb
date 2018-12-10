@@ -76,17 +76,41 @@ module Spree
     end
 
     def digital_assets
-      query = <<-SQL
-        SELECT DISTINCT spree_digital_assets.*
-        FROM spree_digital_assets
-        INNER JOIN spree_assets ON spree_assets.digital_asset_id=spree_digital_assets.id
-        INNER JOIN spree_assets_variants ON spree_assets.id=spree_assets_variants.image_id
-        INNER JOIN spree_variants ON spree_variants.id=spree_variants.id
-        INNER JOIN spree_products ON spree_products.id=spree_variants.product_id
-        WHERE spree_products.id=#{self.id}
-      SQL
-      results = ActiveRecord::Base.connection.exec_query(query)
+      sql = digital_assets_table
+        .project(digital_assets_table[Arel.star])
+        .join(spree_assets_table).on(spree_assets_table[:digital_asset_id].eq(digital_assets_table[:id]))
+        .join(spree_assets_variants_table).on(spree_assets_variants_table[:image_id].eq(spree_assets_table[:id]))
+        .join(variants_table).on(variants_table[:id].eq(spree_assets_variants_table[:variant_id]))
+        .join(products_table).on(products_table[:id].eq(variants_table[:product_id]))
+        .where(where_clause)
+        .to_sql
+
+      results = ActiveRecord::Base.connection.exec_query(sql)
       results.map { |result| Spree::DigitalAsset.new(result); }
+    end
+    
+    def digital_assets_table
+      @digital_assets_table ||= Spree::DigitalAsset.arel_table
+    end
+
+    def spree_assets_variants_table
+      @spree_assets_variants_table ||= Spree::AssetVariant.arel_table
+    end
+
+    def spree_assets_table
+      @spree_assets_table ||= Spree::Asset.arel_table
+    end
+  
+    def variants_table
+      @variants_table ||= Spree::Variant.arel_table
+    end
+
+    def products_table
+      @products_table ||= Spree::Product.arel_table
+    end
+
+    def where_clause
+      products_table[:id].eq(self.id)
     end
 
     MASTER_ATTRIBUTES = [
