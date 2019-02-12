@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'event/adapters/active_support_notifications'
+require_relative 'event/configuration'
 
 module Spree
   module Event
@@ -86,13 +87,13 @@ module Spree
     # Spree::Event::Adapters::ActiveSupportNotifications
     #
     # @example Change the adapter
-    #   Spree::Config.event_adapter_class_name = "Spree::EventBus"
+    #   Spree::Config.events.adapter = "Spree::EventBus.new"
     #
     # @see Spree::AppConfiguration
 =======
 >>>>>>> de6467668... `Spree::Event.adapter` is now a preference from `Spree::Config`
     def adapter
-      @adapter ||= Spree::Config.event_adapter_class_name.constantize
+      Spree::Config.events.adapter
     end
 
 <<<<<<< HEAD
