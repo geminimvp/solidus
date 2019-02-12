@@ -8,8 +8,6 @@ module Spree
 
     extend self
 
-    mattr_accessor(:adapter) { Spree::Event::Adapters::ActiveSupportNotifications }
-
     # Allows to trigger events that can be subscribed using #subscribe. An
     # optional block can be passed that will be executed immediately. The
     # actual code implementation is delegated to the adapter.
@@ -82,6 +80,7 @@ module Spree
     end
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     # The adapter used by Spree::Event, defaults to
     # Spree::Event::Adapters::ActiveSupportNotifications
@@ -90,11 +89,16 @@ module Spree
     #   Spree::Config.event_adapter_class_name = "Spree::EventBus"
     #
     # @see Spree::AppConfiguration
+=======
+>>>>>>> de6467668... `Spree::Event.adapter` is now a preference from `Spree::Config`
     def adapter
       @adapter ||= Spree::Config.event_adapter_class_name.constantize
     end
 
+<<<<<<< HEAD
 >>>>>>> 704ac9445... Add documentation in Yard format to `Spree::Event`
+=======
+>>>>>>> de6467668... `Spree::Event.adapter` is now a preference from `Spree::Config`
     private
 
     def name_with_postfix(name)
