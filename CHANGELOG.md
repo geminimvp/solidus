@@ -1,4 +1,31 @@
-## Solidus 2.8.0 (master, unreleased)
+## Solidus 2.9.0 (master, unreleased)
+
+### Major Changes
+
+### Core
+
+### Backend
+
+**Added Spree::Event**
+
+Solidus now includes an event library that allows to use different adapters.
+The default adapter is based on `ActiveSupport::Notifications` library.
+Events should allow developers to customize and extend Solidus behavior
+more easily by simply subscribing to certain events. Sending emails may be a
+simple use case for this new feature.
+
+### API
+
+### Frontend
+
+### Deprecations
+
+### Misc
+
+### Docs & Guides
+
+
+## Solidus 2.8.0 (2019-01-29)
 
 ### Major Changes
 
