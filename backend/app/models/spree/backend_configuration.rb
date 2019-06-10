@@ -93,7 +93,7 @@ module Spree
         MenuItem.new(
           PRODUCT_TABS,
           'th-large',
-           condition: -> { can?(:admin, Spree::Product) },
+          condition: -> { can?(:admin, Spree::Product) },
           partial: 'spree/admin/shared/product_sub_menu',
           position: 1
         ),
