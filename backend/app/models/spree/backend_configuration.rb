@@ -93,21 +93,7 @@ module Spree
         MenuItem.new(
           PRODUCT_TABS,
           'th-large',
-          condition: -> { can?(:admin, Spree::Product) },
-          partial: 'spree/admin/shared/product_sub_menu'
-        ),
-        MenuItem.new(
-          REPORT_TABS,
-          'file',
-          condition: -> { can?(:admin, :reports) },
-        ),
-        MenuItem.new(
-          CONFIGURATION_TABS,
-          'wrench',
-          condition: -> { can?(:admin, Spree::Store) },
-          label: :settings,
-          partial: 'spree/admin/shared/settings_sub_menu',
-          url: :admin_stores_path,
+           condition: -> { can?(:admin, Spree::Product) },
           partial: 'spree/admin/shared/product_sub_menu',
           position: 1
         ),
@@ -142,6 +128,12 @@ module Spree
           partial: 'spree/admin/shared/settings_sub_menu',
           url: :admin_stores_path,
           position: 5
+        ),
+        MenuItem.new(
+          REPORT_TABS,
+          'file',
+          condition: -> { can?(:admin, :reports) },
+          position: 6
         )
       ]
     end
