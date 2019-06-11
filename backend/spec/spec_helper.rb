@@ -47,6 +47,7 @@ Capybara.register_driver :selenium_chrome_headless do |app|
   browser_options.args << '--headless'
   browser_options.args << '--disable-gpu'
   browser_options.args << '--window-size=1440,1080'
+  browser_options.args << '--enable-features=NetworkService,NetworkServiceInProcess'
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
 end
 
