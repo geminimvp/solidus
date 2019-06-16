@@ -77,6 +77,11 @@ module Spree
       taxons.first ? prepare_taxon_conditions(taxons) : where(nil)
     end
 
+    add_search_scope :in_taxon_ids do |*ids|
+      taxons = Spree::Taxon.where(id: ids.flatten)
+      taxons.empty? ? where(nil) : prepare_taxon_conditions(taxons)
+    end
+
     # a scope that finds all products having property specified by name, object or id
     add_search_scope :with_property do |property|
       joins(:properties).where(property_conditions(property))
