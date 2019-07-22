@@ -142,6 +142,16 @@ module Spree
       like_any([:name, :description, :meta_description, :meta_keywords], prepare_words(words))
     end
 
+    # Finds all products that have a name, description, meta_description or meta_keywords containing the given keywords or
+    # that match a Taxon with the name of the keywords.
+    add_search_scope :in_name_or_description_or_taxon do |words|
+      # joins(:taxons) is used here so the Active Record OR query will have the same structure and not throw a
+      # ArgumentError: Relation passed to #or must be structurally compatible. Incompatible values: [:joins]
+      products_in_attributes = joins(:taxons).like_any([:name, :description, :meta_description, :meta_keywords], prepare_words(words))
+      products_in_taxon = joins(:taxons).where(Spree::Taxon.arel_table[:name].matches(words))
+      products_in_attributes.or(products_in_taxon).distinct
+    end
+
     # Finds all products that have the ids matching the given collection of ids.
     # Alternatively, you could use find(collection_of_ids), but that would raise an exception if one product couldn't be found
     add_search_scope :with_ids do |*ids|
