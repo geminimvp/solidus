@@ -49,7 +49,8 @@ Spree.Models.ImageUpload = Backbone.Model.extend({
 
     // send the image to the server
     Spree.ajax({
-      url: window.location.pathname,
+      // set in the relavant views
+      url: Spree.routes.admin_product_image(window.product_slug),
       type: "POST",
       dataType: 'script',
       data: formData,
