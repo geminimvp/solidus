@@ -41,6 +41,7 @@ module Spree
         end
 
         @taxon.parent_id = taxonomy.root.id unless params[:taxon][:parent_id]
+        @taxon.team_id = taxonomy.team_id
 
         if @taxon.save
           respond_with(@taxon, status: 201, default_template: :show)

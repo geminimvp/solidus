@@ -162,6 +162,7 @@ module Spree
 
         expect(taxon.parent_id).to eq taxonomy.root.id
         expect(taxon.taxonomy_id).to eq taxonomy.id
+        expect(taxon.team_id).to eq taxonomy.team_id
       end
 
       it "can update the position in the list" do
