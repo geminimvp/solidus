@@ -39,6 +39,7 @@ module Spree
       end
 
       def load_data
+        @available_shipping_categories = Spree::ShippingCategory.order(:name)
         @available_zones = Spree::Zone.order(:name)
         @tax_categories = Spree::TaxCategory.order(:name)
         @calculators = Rails.application.config.spree.calculators.shipping_methods

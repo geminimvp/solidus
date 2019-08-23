@@ -70,7 +70,7 @@
       <fieldset class="categories no-border-bottom">
         <legend align="center"><%= plural_resource_name(Spree::ShippingCategory) %></legend>
         <%= f.field_container :categories do %>
-          <% Spree::ShippingCategory.all.each do |category| %>
+          <% @available_shipping_categories.each do |category| %>
             <label>
               <%= check_box_tag('shipping_method[shipping_categories][]', category.id, @shipping_method.shipping_categories.include?(category)) %>
               <%= category.name %><br>
@@ -86,7 +86,7 @@
         <legend align="center"><%= plural_resource_name(Spree::Zone) %></legend>
         <%= f.field_container :zones do %>
           <% shipping_method_zones = @shipping_method.zones.to_a %>
-          <% Spree::Zone.all.each do |zone| %>
+          <% @available_zones.each do |zone| %>
             <label>
               <%= check_box_tag('shipping_method[zones][]', zone.id, shipping_method_zones.include?(zone)) %>
               <%= zone.name %>
